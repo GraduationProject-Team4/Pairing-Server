@@ -65,7 +65,7 @@ def seperate_audio():
         file.save(filename)
         print("==================")
         print("file uploaded")
-        file_size = os.path.getsize('uploads/'+file.filename)
+        file_size = os.path.getsize('uploads/' + file.filename)
         print('File Size:', convert_size(file_size), 'bytes')
         print("==================")
         # 음성 분리
@@ -74,14 +74,15 @@ def seperate_audio():
         print("audio separated")
         # 음성 분류
         predictionList = predict_audio(file.filename)
+        print(predictionList)
         print("audio predicted")
 
         # delete_directory_contents(UPLOAD_FOLDER)
         # delete_directory_contents(SEPARATED_FOLDER)
 
-        return jsonify({'message': 'File uploaded successfully'}, {'filename': file.filename},
-                       {'predictMessage': 'File predicted successfully'}, {'audioPrediction': predictionList}), 200
-
+        return jsonify({'filename': file.filename,
+                        'predictMessage': 'File predicted successfully', 'audioPrediction': predictionList}), 200
+        # return jsonify({'audioPrediction': predictionList}), 200
         # return jsonify({'message': 'File uploaded successfully'}, {'filename': file.filename}), 200
     else:
         return jsonify({'error': 'Invalid file format. Only .wav files are allowed.'}), 400
@@ -93,7 +94,7 @@ def seperate_audio():
 # @app.route('/predict', methods=['POST'])  # 아마 api가 아닌 그냥 함수로 사용할 듯
 def predict_audio(filename):
     audio_list = []
-    path_dir = 'separated/htdemucs/'+os.path.splitext(filename)[0]
+    path_dir = 'separated/htdemucs/' + os.path.splitext(filename)[0]
     file_list = os.listdir(path_dir)
     for files in file_list:
         file_path = path_dir + '/' + files
@@ -119,6 +120,7 @@ def delete_directory_contents(directory_path):
     except OSError as e:
         print(f"Directory '{directory_path}' Error deleting internal content: {e}")
 
+
 def convert_size(size_bytes):
     import math
     if size_bytes == 0:
@@ -128,6 +130,7 @@ def convert_size(size_bytes):
     p = math.pow(1024, i)
     s = round(size_bytes / p, 2)
     return "%s %s" % (s, size_name[i])
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5050", debug=True)
