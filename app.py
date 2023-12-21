@@ -77,8 +77,8 @@ def seperate_audio():
         print(predictionList)
         print("audio predicted")
 
-        # delete_directory_contents(UPLOAD_FOLDER)
-        # delete_directory_contents(SEPARATED_FOLDER)
+        delete_directory_contents(UPLOAD_FOLDER)
+        delete_directory_contents(SEPARATED_FOLDER)
 
         return jsonify({'filename': file.filename,
                         'predictMessage': 'File predicted successfully', 'audioPrediction': predictionList}), 200
